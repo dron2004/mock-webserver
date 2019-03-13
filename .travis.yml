@@ -1,4 +1,11 @@
-language: php
+language:
+  - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then sh; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]];   then php; fi
+
+os:
+  - windows
+  - linux
+
 sudo: false
 
 php:
@@ -16,5 +23,11 @@ matrix:
     - php: nightly
     - php: hhvm
 
-install: composer install
+before_install:
+  - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then choco install php --version 7.2.15; fi
+  - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then choco install composer; fi
+  - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then export PATH=/c/tools/php72:$PATH; fi
+
+install:
+  - - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then composer install; fi
 script: vendor/bin/phpunit --coverage-clover=coverage.clover
