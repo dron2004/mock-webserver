@@ -187,7 +187,6 @@ class MockWebServer_IntegrationTest extends PHPUnit_Framework_TestCase {
 		// Close request to clear up some resources
 		curl_close($ch);
 
-
 		$request = self::$server->getLastRequest();
 
 		$this->assertSame($uri . '?' . $query, $request->getRequestUri());
@@ -268,4 +267,13 @@ class MockWebServer_IntegrationTest extends PHPUnit_Framework_TestCase {
 		];
 	}
 
+	public function testStartStopServer() {
+		$server = new MockWebServer();
+
+		$server->start();
+		$this->assertTrue($server->isRunning());
+
+		$server->stop();
+		$this->assertFalse($server->isRunning());
+	}
 }
